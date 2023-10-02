@@ -12,6 +12,10 @@
     "client": "cd client && npm start"
   },
   "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Raymond-XishengChen/PWA-Text_Editor"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
