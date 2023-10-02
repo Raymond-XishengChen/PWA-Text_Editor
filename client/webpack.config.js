@@ -14,16 +14,58 @@ module.exports = () => {
       install: './src/js/install.js'
     },
     output: {
-      filename: '[name].bundle.js',
+      filename: '[n, ame].bundle.js',
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      // Plugins for generating html file and injecting bundles.
+      new HtmlWebpackPlugin({
+        template:"./index.html",
+        title: "Text Editor",
+      }),
+      // Injecting the service worker
+      new InjectManifest({
+        swSrc: "./src-sw.js",
+        swDest: "src-sw.js",
+      }),
+      //manifest.json file
+      new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
+        name: "Text Editor",
+        short_name: "JATE",
+        description: "An app takes note with or without internet.",
+        background_color: "black",
+        theme_color: "black",
+        start_url: "./",
+        publicPath:"./",
+        icons:[{
+          src: path.resolve("src/images/logo.png"),
+          sizes: [96, 128, 192, 256, 384, 512],
+          destination: path.join("assets", "icons"),
+        },],
+      }),
     ],
 
     module: {
       rules: [
-        
+        // CSS loaders
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
+        },
+        // Babel for ES6
+        {
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
+              plugins: ["@babel/plugin-proposal-object-rest-spread", "@babel/transform-runtime"],
+            },
+          },
+        },
       ],
     },
   };
